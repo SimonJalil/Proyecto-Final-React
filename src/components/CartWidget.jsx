@@ -7,7 +7,7 @@ const CartWidget = () => {
         <>
             <div className="cart">
                 <Button colorScheme="blue">
-                    <CheckCircleIcon/>
+                <i className="ri-shopping-cart-line"></i>
                     <span>
                         3
                     </span>
