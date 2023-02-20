@@ -1,6 +1,6 @@
 # E-commerce: Game Store
 
-Bievenidos al repositorio correspondiente al proyecto final del curso de React en Coderhouse. El mismo consiste en un **E-commerce de venta de videojuegos**.
+Bienvenidos al repositorio correspondiente al proyecto final del curso de React en Coderhouse. El mismo consiste en un **E-commerce de venta de videojuegos**.
 
 El mismo fue realizado utilizando el framework React y una libreria de estilos como lo es Chackra UI.
 
@@ -22,6 +22,8 @@ npm run dev
 Una prueba de funcionamiento del mismo se puede visualizar en el siguiente GIF:
 
 ![alt text](./GameStore-React.gif)
+
+Muchas gracias.
 
 |Nombres|Apellidos|Email|
 |---|---|---|
