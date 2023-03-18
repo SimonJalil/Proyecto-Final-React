@@ -12,11 +12,33 @@ import {
     Text,
     Image
 }from '@chakra-ui/react'
-import ItemCount from './ItemCount'
+import ItemCount from './ItemCount';
+
+import { useEffect, useState } from 'react';
+import {doc, getDoc, getFirestore} from "firebase/firestore";
 
 const ItemDetail = ({game}) => {
 
-    //console.log(game)
+  const {id} = useParams();
+  console.log(id);
+
+  const [producto, setProducto] = useState([]);
+
+  useEffect(() => {
+    const db = getFirestore();
+
+    const biciRef = doc(db, "games", `${id}`);
+    
+    getDoc(biciRef).then((snapshot) => {
+      if(snapshot.exists()){
+        setProducto(snapshot.data());
+        console.log(producto);
+      }
+      else{
+        console.log("No hay documento!");
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -29,16 +51,16 @@ const ItemDetail = ({game}) => {
                 <Stack mt="6" spacing="3">
                   <Heading size="md">{game.name}</Heading>
                   <Text color="blue.800" fontSize="l">
-                    Description: {game.description}
+                    Descripción: {game.description}
                   </Text>
                   <Text color="blue.300" fontSize="l">
-                    Category: {game.category}
+                    Categoría: {game.category}
                   </Text>
                   <Text color="red.500" fontSize="xl">
                     Stock: {game.stock}
                   </Text>
                   <Text color="green.500" fontSize="xl">
-                    Price: U$D {game.price}
+                    Precio: U$D {game.price}
                   </Text>
                 </Stack>
               </CardBody>

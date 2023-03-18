@@ -27,7 +27,7 @@ const Item = ({id,nombre,precio, categoria, stock, img}) => {
                 <Heading size="md">{nombre}</Heading>
 
                 <Text color="blue.800" fontSize="l">
-                  Category: {categoria}
+                  Categoria: {categoria}
                 </Text>
                 <Text color="blue.800" fontSize="l">
                   Precio: {precio}

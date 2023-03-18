@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react';
 import { 
   Text,
@@ -9,10 +9,13 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import { CartContext } from '../contexts/GameStoreContext';
+import { Link } from 'react-router-dom';
 
 const ItemCount = ({stock, id, price, name}) => {
-
+  const [cart, setCart] = useContext(CartContext);
   const [count, setCount] = useState(1);
+  const [addItem, setAddItem] = useState(false); 
 
   const sumarCount = () => {
     setCount(count + 1);
@@ -22,35 +25,72 @@ const ItemCount = ({stock, id, price, name}) => {
     setCount(count - 1); 
   }
 
+  const incluirCarrito = () => {
+    setCart((items) => {
+      const itemEsta = items.find((item) => item.id === id);
+      if(itemEsta){
+        return items.map((item) => {
+          if(item.id === id) {
+            return{...item, quantity: item.quantity + count};
+          } else{
+            return item;
+          }
+        })
+      } else{
+        return[...items, {id, quantity: count, price, name}];
+      }
+    });
+
+    setAddItem(true);
+  }  
+  
+
   return (
     <>
-      <ButtonGroup>
-        {count <= 1 ? (
-          <Tooltip label="minimum stock reached" placement="bottom">
-            <IconButton icon={<MinusIcon />} isDisabled />
-          </Tooltip>
-        ) : (
-          <IconButton icon={<MinusIcon />} onClick={restarCount} />
-        )}
 
+      {!addItem &&
+        <ButtonGroup>
+          {count <= 1 ? (
+            <Tooltip label="Stock mínimo alcanzado" placement="bottom">
+              <IconButton icon={<MinusIcon />} isDisabled />
+            </Tooltip>
+          ) : (
+            <IconButton icon={<MinusIcon />} onClick={restarCount} />
+          )}
+
+          <Center>
+            <Button
+              variant="solid"
+              colorScheme="blue"
+              onClick={() => {incluirCarrito()}}
+            >
+              Añadir a carrito: {count}
+            </Button>
+          </Center>
+
+          {count < stock ? (
+            <IconButton icon={<AddIcon />} onClick={sumarCount} />
+          ) : (
+            <Tooltip label="Stock máximo alcanzado" placement="bottom">
+              <IconButton icon={<AddIcon />} isDisabled />
+            </Tooltip>
+          )}
+          
+        </ButtonGroup>
+      }
+
+      {addItem && 
         <Center>
-          <Button
-            variant="solid"
-            colorScheme="blue"
-          >
-            Add to cart: {count}
-          </Button>
-        </Center>
-
-        {count < stock ? (
-          <IconButton icon={<AddIcon />} onClick={sumarCount} />
-        ) : (
-          <Tooltip label="stock limit reached" placement="bottom">
-            <IconButton icon={<AddIcon />} isDisabled />
-          </Tooltip>
-        )}
-        
-      </ButtonGroup>
+          <Link to={`/cart`}>
+            <Button
+              variant="solid"
+              colorScheme="orange"
+            >
+              Finalizar compra
+            </Button>
+          </Link>
+      </Center>
+      }
     </>
   )
 }
