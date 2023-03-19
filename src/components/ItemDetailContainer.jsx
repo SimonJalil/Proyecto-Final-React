@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import ItemDetail from './ItemDetail'
+import { getFirestore, collection, getDocs } from 'firebase/firestore'
 
 
 const ItemDetailContainer = () => {
+  const [data, setData] = useState([]);
 
-  const {id} = useParams();
+  useEffect(() => {
+    const db = getFirestore();
+    const gamesCollection = collection(db, "games");
+    getDocs(gamesCollection).then((querySnapshot) => {
+      const games = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setData(games);
+    });
+  }, []);
 
-  const getProducts = async () => {
-    const response = await fetch("../../datos.json");
-    const data = await response.json();
-    return data;
-  }
-
-  const [game, setGame] = useState([]); 
-
-  useEffect(()=>{
-      getProducts().then((game) => setGame(game));
-  },[]);
-
-  const gameFilter = game.filter((game) => game.id === Number(id));
 
   return (
-    <ItemDetail game={gameFilter}/>
+    <ItemDetail game={data}/>
   )
 }
 

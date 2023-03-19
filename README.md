@@ -12,6 +12,8 @@ Dentro de los aspectos de React, se utilizaron conceptos tales como:
 3. Componentes.
 5. Promesas, asincronía y MAP
 
+Además, se utilizo Firebase para poder utilizar una base de datos no relacional en orden de poder almacenar las distintas solicitudes de los usuarios.
+
 _Para porder realizar una correcta ejecucion y prueba del mismo, se debe descargar y abrir su contenido en un proyecto nuevo en VSCode. Posterior se debe ejecutar los siguientes comandos:_
 
 ```

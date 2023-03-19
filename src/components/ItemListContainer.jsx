@@ -3,65 +3,30 @@ import { useEffect, useState } from "react";
 import Componente from './Componente'
 import ItemList from "./ItemList";
 import { useParams } from "react-router-dom";
+import { collection, getFirestore, getDocs } from "firebase/firestore";
 
 const ItemListContainer = () => {
+    const[games,setGames] = useState([]);
+    // Obtengo parametro de categoria
     const { category } = useParams();
 
-    const datos = [
-        {id: 1, nombre: "Producto 1", precio: 49.99, stock: 5},
-        {id: 2, nombre: "Producto 2", precio: 39.99, stock: 5},
-        {id: 3, nombre: "Producto 3", precio: 130, stock: 3},
-        {id: 4, nombre: "Producto 4", precio: 200, stock: 6},
-        {id: 5, nombre: "Producto 5", precio: 100, stock: 2},
-    ];
+    useEffect(() => {
+        const db = getFirestore();
+        const gamesCollection = collection(db, "games");
+        getDocs(gamesCollection).then((querySnapshot) => {
+            const games = querySnapshot.docs.map((doc) => ({
+              ...doc.data(),
+              id: doc.id,
+            }));
+            setGames(games);
+          });
+    }, []);
+
+    const catFiltro = games.filter((game) => game.category === category);
     
-    /* const getDatos = () => {
-        return new Promise((resolve, reject) => {
-            if(datos.length == 0){
-                reject(new Error("No hay datos para mostrar"));
-            }
-            setTimeout(() => {
-                resolve (datos);
-            }, 3000);
-        });
-    }
-
-    async function fetchingData(){
-        try{
-            const datosFetched = await getDatos();
-            console.log(datosFetched);
-        }
-        catch(err){ 
-            console.log(err);
-        }
-    };
-
-    fetchingData(); */
-
-    const getProducts = async () => {
-        const response = await fetch("../../datos.json");
-        //console.log(response);
-
-        const data = await response.json();
-        //console.log(data);
-
-        return data;
-    }
-
-    const [product, setProduct] = useState([]);
-    //console.log(product);
-    
-    useEffect(()=>{
-        getProducts().then((product) => setProduct(product));
-    },[]);
-
-    //getProducts();
-    
-    const catFiltro = product.filter((game) => game.category === category);
-
     return(
         <>
-            {category ? <ItemList games={catFiltro}/> : <ItemList games={product}/>}
+            {category ? <ItemList games={catFiltro}/> : <ItemList games={games}/>}
         </>
     );
 };

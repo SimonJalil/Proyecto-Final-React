@@ -7,15 +7,19 @@ import {
   Tooltip,
   Center,
   Button,
+  Toast
 } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { CartContext } from '../contexts/GameStoreContext';
 import { Link } from 'react-router-dom';
+import { useToast } from '@chakra-ui/react';
 
 const ItemCount = ({stock, id, price, name}) => {
   const [cart, setCart] = useContext(CartContext);
   const [count, setCount] = useState(1);
   const [addItem, setAddItem] = useState(false); 
+
+  const toast = useToast();
 
   const sumarCount = () => {
     setCount(count + 1);
@@ -40,8 +44,18 @@ const ItemCount = ({stock, id, price, name}) => {
         return[...items, {id, quantity: count, price, name}];
       }
     });
-
     setAddItem(true);
+    
+    toast({
+      title: 'Agregado al carrito!',
+      description: "Completa el formulario de compra para finalizar.",
+      status: 'info',
+      position: 'top',
+      duration: 5000,
+      isClosable: true,
+    });
+
+    localStorage.setItem("carrito", JSON.stringify(cart));
   }  
   
 

@@ -20,7 +20,6 @@ import {doc, getDoc, getFirestore} from "firebase/firestore";
 const ItemDetail = ({game}) => {
 
   const {id} = useParams();
-  console.log(id);
 
   const [producto, setProducto] = useState([]);
 
@@ -32,7 +31,6 @@ const ItemDetail = ({game}) => {
     getDoc(biciRef).then((snapshot) => {
       if(snapshot.exists()){
         setProducto(snapshot.data());
-        console.log(producto);
       }
       else{
         console.log("No hay documento!");
@@ -40,9 +38,11 @@ const ItemDetail = ({game}) => {
     });
   }, []);
 
+  const gameFilter = game.filter((bike) => bike.id == id);
+
   return (
     <>
-      {game.map((game) => (
+      {gameFilter.map((game) => (
         <div key={game.id}>
           <Center p="1rem">
             <Card className="card-principal">
